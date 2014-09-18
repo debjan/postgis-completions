@@ -1,0 +1,444 @@
+AddAuth(auth_token)::boolean \nAdd an authorization token to be used in current transaction.
+AddEdge(toponame,aline)::integer \nAdds a linestring edge to the edge table and associated\nstart and end points to the point nodes table of the\nspecified topology schema using the specified linestring\ngeometry and returns the edgeid of the new (or existing) edge.
+AddFace(toponame,apolygon,force_new=false)::integer \nRegisters a face primitive to a topology and get it's\nidentifier.
+AddGeometryColumn(table_name,column_name,srid,type,dimension,use_typmod=true)::text \nAdds a geometry column to an existing table of attributes.\nBy default uses type modifier to define rather than\nconstraints. Pass in false for use_typmod to get old check\nconstraint based behavior
+AddNode(toponame,apoint,allowEdgeSplitting=false,computeContainingFace=false)::integer \nAdds a point node to the node table in the specified\ntopology schema and returns the nodeid of new node. If point\nalready exists as node, the existing nodeid is returned.
+AddOverviewConstraints(ovschema,ovtable,ovcolumn,refschema,reftable,refcolumn,ovfactor)::boolean \nTag a raster column as being an overview of another.
+AddRasterConstraints(rasttable,rastcolumn,srid,scale_x,scale_y,blocksize_x,blocksize_y,same_alignment,regular_blocking,num_bands=true,pixel_types=true,nodata_values=true,out_db=true,extent=true)::boolean \nAdds raster constraints to a loaded raster table for a\nspecific column that constrains spatial ref, scaling,\nblocksize, alignment, bands, band type and a flag to denote\nif raster column is regularly blocked. The table must be\nloaded with data for the constraints to be inferred. Returns\ntrue of the constraint setting was accomplished and if issues\na notice.
+AddTopoGeometryColumn(topology_name,schema_name,table_name,column_name,feature_type)::text \nAdds a topogeometry column to an existing table, registers\nthis new column as a layer in topology.layer and returns the\nnew layer_id.
+AsGML(tg)::text \nReturns the GML representation of a topogeometry.
+AsTopoJSON(tg,edgeMapTable)::text \nReturns the TopoJSON representation of a topogeometry.
+Box2D(geomA)::box2d \nReturns a BOX2D representing the maximum extents of the\ngeometry.
+Box3D(geomA)::box3d \nReturns a BOX3D representing the maximum extents of the\ngeometry.
+Box3D(rast)::box3d \nReturns the box 3d representation of the enclosing box of\nthe raster.
+CheckAuth(a_schema_name,a_table_name,a_key_column_name)::integer \nCreates trigger on a table to prevent/allow updates and\ndeletes of rows based on authorization token.
+clearTopoGeom(topogeom)::topogeometry \nClears the content of a topo geometry
+CopyTopology(existing_topology_name,new_name)::integer \nMakes a copy of a topology structure (nodes, edges, faces,\nlayers and TopoGeometries).
+CreateTopoGeom(toponame,tg_type,layer_id,tg_objs)::topogeometry \nCreates a new topo geometry object from topo element array -\ntg_type: 1:[multi]point, 2:[multi]line, 3:[multi]poly,\n4:collection
+CreateTopology(topology_schema_name)::integer \nCreates a new topology schema and registers this new schema\nin the topology.topology table.
+DisableLongTransactions()::text \nDisable long transaction support. This function removes the\nlong transaction support metadata tables, and drops all\ntriggers attached to lock-checked tables.
+Drop_Indexes_Generate_Script(param_schema=tiger_data)::text \nGenerates a script that drops all non-primary key and\nnon-unique indexes on tiger schema and user specified schema.\nDefaults schema to tiger_data if no schema is specified.
+Drop_Nation_Tables_Generate_Script(param_schema=tiger_data)::text \nGenerates a script that drops all tables in the specified\nschema that start with county_all, state_all or stae code\nfollowed by county or state.
+Drop_State_Tables_Generate_Script(param_state,param_schema=tiger_data)::text \nGenerates a script that drops all tables in the specified\nschema that are prefixed with the state abbreviation.\nDefaults schema to tiger_data if no schema is specified.
+DropGeometryColumn(table_name,column_name)::text \nRemoves a geometry column from a spatial table.
+DropGeometryTable(table_name)::boolean \nDrops a table and all its references in geometry_columns.
+DropOverviewConstraints(ovschema,ovtable,ovcolumn)::boolean \nUntag a raster column from being an overview of another.
+DropRasterConstraints(rasttable,rastcolumn,srid,scale_x,scale_y,blocksize_x,blocksize_y,same_alignment,regular_blocking,num_bands=true,pixel_types=true,nodata_values=true,out_db=true,extent=true)::boolean \nDrops PostGIS raster constraints that refer to a raster\ntable column. Useful if you need to reload data or update\nyour raster column data.
+DropTopoGeometryColumn(schema_name,table_name,column_name)::text \nDrops the topogeometry column from the table named\ntable_name in schema schema_name and unregisters the columns\nfrom topology.layer table.
+DropTopology(topology_schema_name)::integer \nUse with caution: Drops a topology schema and deletes its\nreference from topology.topology table and references to\ntables in that schema from the geometry_columns table.
+EnableLongTransactions()::text \nEnable long transaction support. This function creates the\nrequired metadata tables, needs to be called once before\nusing the other functions in this section. Calling it twice\nis harmless.
+Equals(tg1,tg2)::boolean \nReturns true if two topogeometries are composed of the same\ntopology primitives.
+Equals(tg1,tg2)::boolean \nReturns true if two topogeometries are composed of the same\ntopology primitives.
+Find_SRID(a_schema_name,a_table_name,a_geomfield_name)::integer \nThe syntax is find_srid(a_db_schema, a_table, a_column) and\nthe function returns the integer SRID of the specified column\nby searching through the GEOMETRY_COLUMNS table.
+geocode(address,max_results=10,restrict_region=NULL,OUT addy,OUT geomout,OUT rating)::setof \nrecord Takes in an address as a string (or other normalized\naddress) and outputs a set of possible locations which\ninclude a point geometry in NAD 83 long lat, a normalized\naddress for each, and the rating. The lower the rating the\nmore likely the match. Results are sorted by lowest rating\nfirst. Can optionally pass in maximum results, defaults to\n10, and restrict_region (defaults to NULL)
+geocode_intersection( roadway1,roadway2,in_state,in_city,in_zip,max_results=10,OUT addy,OUT geomout,OUT rating)::setof \nrecord Takes in 2 streets that intersect and a state, city,\nzip, and outputs a set of possible locations on the first\ncross street that is at the intersection, also includes a\npoint geometry in NAD 83 long lat, a normalized address for\neach location, and the rating. The lower the rating the more\nlikely the match. Results are sorted by lowest rating first.\nCan optionally pass in maximum results, defaults to 10
+GeometryType(geomA)::text \nReturns the type of the geometry as a string. Eg:\n'LINESTRING', 'POLYGON', 'MULTIPOINT', etc.
+Get_Geocode_Setting( setting_name)::text \nReturns value of specific setting stored in\ntiger.geocode_settings table.
+get_tract( loc_geom,output_field=name)::text \nReturns census tract or field from tract table of where the\ngeometry is located. Default to returning short name of tract.
+GetEdgeByPoint(atopology,apoint,tol)::integer \nFind the edge-id of an edge that intersects a given point
+GetFaceByPoint(atopology,apoint,tol)::integer \nFind the face-id of a face that intersects a given point
+GetNodeByPoint(atopology,point,tol)::integer \nFind the id of a node at a point location
+GetNodeEdges(atopology,anode)::getfaceedges_returntype \nReturns an ordered set of edges incident to the given node.
+GetRingEdges(atopology,aring,max_edges=null)::getfaceedges_returntype \nReturns an ordered set of edges forming a ring with the\ngiven edge .
+GetTopoGeomElementArray(toponame,layer_id,tg_id)::topoelementarray \nReturns a topoelementarray (an array of topoelements)\ncontaining the topological elements and type of the given\nTopoGeometry (primitive elements)
+GetTopoGeomElements(toponame,layer_id,tg_id)::setof \ntopoelement Returns a set of topoelement objects containing\nthe topological element_id,element_type of the given\nTopoGeometry (primitive elements)
+GetTopologyID(toponame)::integer \nReturns the id of a topology in the topology.topology table\ngiven the name of the topology.
+GetTopologyID(toponame)::integer \nReturns the SRID of a topology in the topology.topology\ntable given the name of the topology.
+GetTopologyName(topology_id)::varchar \nReturns the name of a topology (schema) given the id of the\ntopology.
+Install_Missing_Indexes()::boolean \nFinds all tables with key columns used in geocoder joins and\nfilter conditions that are missing used indexes on those\ncolumns and will add them.
+loader_generate_census_script(param_states,os)::setof \ntext Generates a shell script for the specified platform for\nthe specified states that will download Tiger census state\ntract, bg, and tabblocks data tables, stage and load into\ntiger_data schema. Each state script is returned as a\nseparate record.
+loader_generate_nation_script(os)::text \nGenerates a shell script for the specified platform that\nloads in the county and state lookup tables.
+loader_generate_script(param_states,os)::setof \ntext Generates a shell script for the specified platform for\nthe specified states that will download Tiger data, stage and\nload into tiger_data schema. Each state script is returned as\na separate record. Latest version supports Tiger 2010\nstructural changes and also loads census tract, block groups,\nand blocks tables.
+LockRow(a_schema_name,a_table_name,a_row_key,an_auth_token,expire_dt)::integer \nSet lock/authorization for specific row in table
+Missing_Indexes_Generate_Script()::text \nFinds all tables with key columns used in geocoder joins\nthat are missing indexes on those columns and will output the\nSQL DDL to define the index for those tables.
+normalize_address(in_address)::norm_addy \nGiven a textual street address, returns a composite\nnorm_addy type that has road suffix, prefix and type\nstandardized, street, streetname etc. broken into separate\nfields. This function will work with just the lookup data\npackaged with the tiger_geocoder (no need for tiger census\ndata).
+pagc_normalize_address(in_address)::norm_addy \nGiven a textual street address, returns a composite\nnorm_addy type that has road suffix, prefix and type\nstandardized, street, streetname etc. broken into separate\nfields. This function will work with just the lookup data\npackaged with the tiger_geocoder (no need for tiger census\ndata). Requires address_standardizer extension.
+Polygonize(toponame)::text \nFind and register all faces defined by topology edges
+Populate_Geometry_Columns(use_typmod=true)::text \nEnsures geometry columns are defined with type modifiers or\nhave appropriate spatial constraints This ensures they will\nbe registered correctly in geometry_columns view. By default\nwill convert all geometry columns with no type modifier to\nones with type modifiers. To get old behavior set\nuse_typmod=false
+PostGIS_AddBBox(geomA)::geometry \nAdd bounding box to the geometry.
+PostGIS_DropBBox(geomA)::geometry \nDrop the bounding box cache from the geometry.
+PostGIS_Full_Version()::text \nReports full postgis version and build configuration infos.
+PostGIS_GEOS_Version()::text \nReturns the version number of the GEOS library.
+PostGIS_HasBBox(geomA)::boolean \nReturns TRUE if the bbox of this geometry is cached, FALSE\notherwise.
+PostGIS_Lib_Build_Date()::text \nReturns build date of the PostGIS library.
+PostGIS_Lib_Version()::text \nReturns the version number of the PostGIS library.
+PostGIS_LibXML_Version()::text \nReturns the version number of the libxml2 library.
+PostGIS_PROJ_Version()::text \nReturns the version number of the PROJ4 library.
+PostGIS_Raster_Lib_Build_Date()::text \nReports full raster library build date.
+PostGIS_Raster_Lib_Version()::text \nReports full raster version and build configuration infos.
+PostGIS_Scripts_Build_Date()::text \nReturns build date of the PostGIS scripts.
+PostGIS_Scripts_Installed()::text \nReturns version of the postgis scripts installed in this\ndatabase.
+PostGIS_Scripts_Released()::text \nReturns the version number of the postgis.sql script\nreleased with the installed postgis lib.
+postgis_sfcgal_version()::text \nReturns the version of SFCGAL in use
+PostGIS_Version()::text \nReturns PostGIS version number and compile-time options.
+pprint_addy(in_addy)::varchar \nGiven a norm_addy composite type object, returns a pretty\nprint representation of it. Usually used in conjunction with\nnormalize_address.
+Reverse_Geocode(pt,include_strnum_range=false,OUT intpt,OUT addy,OUT street)::record \nTakes a geometry point in a known spatial ref sys and\nreturns a record containing an array of theoretically\npossible addresses and an array of cross streets. If\ninclude_strnum_range = true, includes the street range in the\ncross streets.
+Set_Geocode_Setting( setting_name,setting_value)::text \nSets a setting that affects behavior of geocoder functions.
+ST_3DArea(geom1)::float \nComputes area of 3D geometries
+ST_3DClosestPoint(g1,g2)::geometry \nReturns the 3-dimensional point on g1 that is closest to g2.\nThis is the first point of the 3D shortest line.
+ST_3DDFullyWithin(g1,g2,distance)::boolean \nReturns true if all of the 3D geometries are within the\nspecified distance of one another.
+ST_3DDistance(g1,g2)::float \nFor geometry type Returns the 3-dimensional cartesian\nminimum distance (based on spatial ref) between two\ngeometries in projected units.
+ST_3DDWithin(g1,g2,distance_of_srid)::boolean \nFor 3d (z) geometry type Returns true if two geometries 3d\ndistance is within number of units.
+ST_3DExtent(geomfield)::box3d \nAn aggregate function that returns the box3D bounding box\nthat bounds rows of geometries.
+ST_3DIntersection(geom1,geom2)::geometry \nPerform 3D intersection
+ST_3DIntersects(geomA,geomB)::boolean \nReturns TRUE if the Geometries 'spatially intersect' in 3d -\nonly for points and linestrings
+ST_3DLength(a_3dlinestring)::float \nReturns the 3-dimensional or 2-dimensional length of the\ngeometry if it is a linestring or multi-linestring.
+ST_3DLength_Spheroid(a_linestring,a_spheroid)::float \nCalculates the length of a geometry on an ellipsoid, taking\nthe elevation into account. This is just an alias for\nST_Length_Spheroid.
+ST_3DLongestLine(g1,g2)::geometry \nReturns the 3-dimensional longest line between two geometries
+ST_3DMakeBox(point3DLowLeftBottom,point3DUpRightTop)::box3d \nCreates a BOX3D defined by the given 3d point geometries.
+ST_3DMaxDistance(g1,g2)::float \nFor geometry type Returns the 3-dimensional cartesian\nmaximum distance (based on spatial ref) between two\ngeometries in projected units.
+ST_3DPerimeter(geomA)::float \nReturns the 3-dimensional perimeter of the geometry, if it\nis a polygon or multi-polygon.
+ST_3DShortestLine(g1,g2)::geometry \nReturns the 3-dimensional shortest line between two geometries
+ST_Accum(geomfield)::geometry \nAggregate. Constructs an array of geometries.
+ST_AddBand(rast,addbandargset)::raster \nReturns a raster with the new band(s) of given type added\nwith given initial value in the given index location. If no\nindex is specified, the band is added to the end.
+ST_AddEdgeModFace(atopology,anode,anothernode,acurve)::integer \nAdd a new edge and, if in doing so it splits a face, modify\nthe original face and add a new face.
+ST_AddEdgeNewFaces(atopology,anode,anothernode,acurve)::integer \nAdd a new edge and, if in doing so it splits a face, delete\nthe original face and replace it with two new faces.
+ST_AddIsoEdge(atopology,anode,anothernode,alinestring)::integer \nAdds an isolated edge defined by geometry alinestring to a\ntopology connecting two existing isolated nodes anode and\nanothernode and returns the edge id of the new edge.
+ST_AddIsoNode(atopology,aface,apoint)::integer \nAdds an isolated node to a face in a topology and returns\nthe nodeid of the new node. If face is null, the node is\nstill created.
+ST_AddMeasure(geom_mline,measure_start,measure_end)::geometry \nReturn a derived geometry with measure elements linearly\ninterpolated between the start and end points. If the\ngeometry has no measure dimension, one is added. If the\ngeometry has a measure dimension, it is over-written with new\nvalues. Only LINESTRINGS and MULTILINESTRINGS are supported.
+ST_AddPoint(linestring,point)::geometry \nAdds a point to a LineString before point::position (0-based\nindex).
+ST_Affine(geomA,a,b,c,d,e,f,g,h,i,xoff,yoff,zoff)::geometry \nApplies a 3d affine transformation to the geometry to do\nthings like translate, rotate, scale in one step.
+ST_Area(g1)::float \nReturns the area of the surface if it is a polygon or\nmulti-polygon. For 'geometry' type area is in SRID units. For\n'geography' area is in square meters.
+ST_AsBinary(g1)::bytea \nReturn the Well-Known Binary (WKB) representation of the\ngeometry/geography without SRID meta data.
+ST_AsBinary(rast,outasin=FALSE)::bytea \nReturn the Well-Known Binary (WKB) representation of the\nraster without SRID meta data.
+ST_AsEWKB(g1)::bytea \nReturn the Well-Known Binary (WKB) representation of the\ngeometry with SRID meta data.
+ST_AsEWKT(g1)::text \nReturn the Well-Known Text (WKT) representation of the\ngeometry with SRID meta data.
+ST_AsGDALRaster(rast,format,options=NULL,srid=sameassource)::bytea \nReturn the raster tile in the designated GDAL Raster format.\nRaster formats are one of those supported by your compiled\nlibrary. Use ST_GDALRasters() to get a list of formats\nsupported by your library.
+ST_AsGeoJSON(geom,maxdecimaldigits=15,options=0)::text \nReturn the geometry as a GeoJSON element.
+ST_AsGML(version,geom,maxdecimaldigits=15,options=0,nprefix=null,id=null)::text \nReturn the geometry as a GML version 2 or 3 element.
+ST_AsHEXEWKB(g1,NDRorXDR)::text \nReturns a Geometry in HEXEWKB format (as text) using either\nlittle-endian (NDR) or big-endian (XDR) encoding.
+ST_AsJPEG(rast,options=NULL)::bytea \nReturn the raster tile selected bands as a single Joint\nPhotographic Exports Group (JPEG) image (byte array). If no\nband is specified and 1 or more than 3 bands, then only the\nfirst band is used. If only 3 bands then all 3 bands are used\nand mapped to RGB.
+ST_AsKML(geom,maxdecimaldigits=15)::text \nReturn the geometry as a KML element. Several variants.\nDefault version=2, default precision=15
+ST_AsLatLonText(pt)::text \nReturn the Degrees, Minutes, Seconds representation of the\ngiven point.
+ST_Aspect(rast,band=1,pixeltype=32BF,units=DEGREES,interpolate_nodata=FALSE)::raster \nReturns the aspect (in degrees by default) of an elevation\nraster band. Useful for analyzing terrain.
+ST_AsPNG(rast,options=NULL)::bytea \nReturn the raster tile selected bands as a single portable\nnetwork graphics (PNG) image (byte array). If 1, 3, or 4\nbands in raster and no bands are specified, then all bands\nare used. If more 2 or more than 4 bands and no bands\nspecified, then only band 1 is used. Bands are mapped to RGB\nor RGBA space.
+ST_AsRaster(geom,ref,pixeltype,value=1,nodataval=0,touched=false)::raster \nConverts a PostGIS geometry to a PostGIS raster.
+ST_AsSVG(geom,rel=0,maxdecimaldigits=15)::text \nReturns a Geometry in SVG path data given a geometry or\ngeography object.
+ST_AsText(g1)::text \nReturn the Well-Known Text (WKT) representation of the\ngeometry/geography without SRID metadata.
+ST_AsTIFF(rast,options='',srid=sameassource)::bytea \nReturn the raster selected bands as a single TIFF image\n(byte array). If no band is specified, then will try to use\nall bands.
+ST_AsX3D(g1,maxdecimaldigits=15,options=0)::text \nReturns a Geometry in X3D xml node element format:\nISO-IEC-19776-1.2-X3DEncodings-XML
+ST_Azimuth(pointA,pointB)::float \nReturns the north-based azimuth as the angle in radians\nmeasured clockwise from the vertical on pointA to pointB.
+ST_Band(rast,nbands = ARRAY[1])::raster \nReturns one or more bands of an existing raster as a new\nraster. Useful for building new rasters from existing rasters.
+ST_BandIsNoData(rast,band,forceChecking=true)::boolean \nReturns true if the band is filled with only nodata values.
+ST_BandMetaData(rast,bandnum=1)::record \nReturns basic meta data for a specific raster band. band num\n1 is assumed if none-specified.
+ST_BandNoDataValue(rast,bandnum=1)::double \nReturns the value in a given band that represents no data.\nIf no band num 1 is assumed.
+ST_BandPath(rast,bandnum=1)::text \nReturns system file path to a band stored in file system. If\nno bandnum specified, 1 is assumed.
+ST_BandPixelType(rast,bandnum=1)::text \nReturns the type of pixel for given band. If no bandnum\nspecified, 1 is assumed.
+ST_BdMPolyFromText(WKT,srid)::geometry \nConstruct a MultiPolygon given an arbitrary collection of\nclosed linestrings as a MultiLineString text representation\nWell-Known text representation.
+ST_BdPolyFromText(WKT,srid)::geometry \nConstruct a Polygon given an arbitrary collection of closed\nlinestrings as a MultiLineString Well-Known text\nrepresentation.
+ST_Boundary(geomA)::geometry \nReturns the closure of the combinatorial boundary of this\nGeometry.
+ST_Box2dFromGeoHash(geohash,precision=full_precision_of_geohash)::box2d \nReturn a BOX2D from a GeoHash string.
+ST_Buffer(g1,radius_of_buffer)::geometry (T) \nFor geometry: Returns a geometry that represents all points\nwhose distance from this Geometry is less than or equal to\ndistance. Calculations are in the Spatial Reference System of\nthis Geometry. For geography: Uses a planar transform\nwrapper. Introduced in 1.5 support for different end cap and\nmitre settings to control shape. buffer_style options:\nquad_segs=#,endcap=round|flat|square,join=round|mitre|bevel,mit\nre_limit=#.#
+ST_BuildArea(A)::geometry \nCreates an areal geometry formed by the constituent linework\nof given geometry
+ST_Centroid(g1)::geometry \nReturns the geometric center of a geometry.
+ST_ChangeEdgeGeom(atopology,anedge,acurve)::integer \nChanges the shape of an edge without affecting the topology\nstructure.
+ST_Clip(rast,nband,geom,nodataval=NULL,crop=TRUE)::raster \nReturns the raster clipped by the input geometry. If band\nnumber not is specified, all bands are processed. If crop is\nnot specified or TRUE, the output raster is cropped.
+ST_ClosestPoint(g1,g2)::geometry \nReturns the 2-dimensional point on g1 that is closest to g2.\nThis is the first point of the shortest line.
+ST_Collect(g1field)::geometry \nReturn a specified ST_Geometry value from a collection of\nother geometries.
+ST_CollectionExtract(collection,type)::geometry \nGiven a (multi)geometry, returns a (multi)geometry\nconsisting only of elements of the specified type.
+ST_CollectionHomogenize(collection)::geometry \nGiven a geometry collection, returns the 'simplest'\nrepresentation of the contents.
+ST_ColorMap(rast,nband=1,colormap=grayscale,method=INTERPOLATE)::raster \nCreates a new raster of up to four 8BUI bands (grayscale,\nRGB, RGBA) from the source raster and a specified band. Band\n1 is assumed if not specified.
+ST_ConcaveHull(geomA,target_percent,allow_holes=false)::geometry \nThe concave hull of a geometry represents a possibly concave\ngeometry that encloses all geometries within the set. You can\nthink of it as shrink wrapping.
+ST_Contains(geomA,geomB)::boolean \nReturns true if and only if no points of B lie in the\nexterior of A, and at least one point of the interior of B\nlies in the interior of A.
+ST_Contains(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if no points of raster rastB lie in the exterior\nof raster rastA and at least one point of the interior of\nrastB lies in the interior of rastA.
+ST_ContainsProperly(geomA,geomB)::boolean \nReturns true if B intersects the interior of A but not the\nboundary (or exterior). A does not contain properly itself,\nbut does contain itself.
+ST_ContainsProperly(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if rastB intersects the interior of rastA but\nnot the boundary or exterior of rastA.
+ST_ConvexHull(geomA)::geometry \nThe convex hull of a geometry represents the minimum convex\ngeometry that encloses all geometries within the set.
+ST_ConvexHull(rast)::geometry \nReturn the convex hull geometry of the raster including\npixel values equal to BandNoDataValue. For regular shaped and\nnon-skewed rasters, this gives the same result as ST_Envelope\nso only useful for irregularly shaped or skewed rasters.
+ST_CoordDim(geomA)::integer \nReturn the coordinate dimension of the ST_Geometry value.
+ST_Count(rast,nband=1,exclude_nodata_value=true)::bigint \nReturns the number of pixels in a given band of a raster or\nraster coverage. If no band is specified defaults to band 1.\nIf exclude_nodata_value is set to true, will only count\npixels that are not equal to the nodata value.
+ST_CoveredBy(geomA,geomB)::boolean \nReturns 1 (TRUE) if no point in Geometry/Geography A is\noutside Geometry/Geography B
+ST_CoveredBy(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if no points of raster rastA lie outside raster\nrastB.
+ST_Covers(geomA,geomB)::boolean \nReturns 1 (TRUE) if no point in Geometry B is outside\nGeometry A
+ST_Covers(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if no points of raster rastB lie outside raster\nrastA.
+ST_CreateTopoGeo(atopology,acollection)::text \nAdds a collection of geometries to a given empty topology\nand returns a message detailing success.
+ST_Crosses(g1,g2)::boolean \nReturns TRUE if the supplied geometries have some, but not\nall, interior points in common.
+ST_CurveToLine(curveGeom)::geometry \nConverts a CIRCULARSTRING/CURVEDPOLYGON to a LINESTRING/POLYGON
+ST_DelaunayTriangles(g1,tolerance,flags)::geometry \nReturn a Delaunay triangulation around the given input points.
+ST_DFullyWithin(g1,g2,distance)::boolean \nReturns true if all of the geometries are within the\nspecified distance of one another
+ST_DFullyWithin(rastA,nbandA,rastB,nbandB,distance_of_srid)::boolean \nReturn true if rasters rastA and rastB are fully within the\nspecified distance of each other.
+ST_Difference(geomA,geomB)::geometry \nReturns a geometry that represents that part of geometry A\nthat does not intersect with geometry B.
+ST_Dimension(g)::integer \nThe inherent dimension of this Geometry object, which must\nbe less than or equal to the coordinate dimension.
+ST_Disjoint(A,B)::boolean \nReturns TRUE if the Geometries do not 'spatially intersect'\n- if they do not share any space together.
+ST_Disjoint(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if raster rastA does not spatially intersect rastB.
+ST_Distance(g1,g2)::float \nFor geometry type Returns the 2-dimensional cartesian\nminimum distance (based on spatial ref) between two\ngeometries in projected units. For geography type defaults to\nreturn spheroidal minimum distance between two geographies in\nmeters.
+ST_Distance_Sphere(geomlonlatA,geomlonlatB)::float \nReturns minimum distance in meters between two lon/lat\ngeometries. Uses a spherical earth and radius of 6370986\nmeters. Faster than ST_Distance_Spheroid\nST_Distance_Spheroid, but less accurate. PostGIS versions\nprior to 1.5 only implemented for points.
+ST_Distance_Spheroid(geomlonlatA,geomlonlatB,measurement_spheroid)::float \nReturns the minimum distance between two lon/lat geometries\ngiven a particular spheroid. PostGIS versions prior to 1.5\nonly support points.
+ST_Distinct4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the number of\nunique pixel values in a neighborhood.
+ST_Dump(g1)::geometry_dump \nReturns a set of geometry_dump (geom,path) rows, that make\nup a geometry g1.
+ST_DumpAsPolygons(rast,band_num=1,exclude_nodata_value=TRUE)::setof \ngeomval Returns a set of geomval (geom,val) rows, from a\ngiven raster band. If no band number is specified, band num\ndefaults to 1.
+ST_DumpPoints(geom)::geometry_dump \nReturns a set of geometry_dump (geom,path) rows of all\npoints that make up a geometry.
+ST_DumpRings(a_polygon)::geometry_dump \nReturns a set of geometry_dump rows, representing the\nexterior and interior rings of a polygon.
+ST_DumpValues(rast,nband,exclude_nodata_value=true)::setof \nrecord Get the values of the specified band as a 2-dimension\narray.
+ST_DWithin(g1,g2,distance_of_srid)::boolean \nReturns true if the geometries are within the specified\ndistance of one another. For geometry units are in those of\nspatial reference and For geography units are in meters and\nmeasurement is defaulted to use_spheroid=true (measure around\nspheroid), for faster check, use_spheroid=false to measure\nalong sphere.
+ST_DWithin(rastA,nbandA,rastB,nbandB,distance_of_srid)::boolean \nReturn true if rasters rastA and rastB are within the\nspecified distance of each other.
+ST_EndPoint(g)::boolean \nReturns the last point of a LINESTRING geometry as a POINT.
+ST_Envelope(g1)::geometry \nReturns a geometry representing the double precision\n(float8) bounding box of the supplied geometry.
+ST_Envelope(rast)::geometry \nReturns the polygon representation of the extent of the raster.
+ST_Equals(A,B)::boolean \nReturns true if the given geometries represent the same\ngeometry. Directionality is ignored.
+ST_EstimatedExtent(schema_name,table_name,geocolumn_name)::box2d \nReturn the 'estimated' extent of the given spatial table.\nThe estimated is taken from the geometry column's statistics.\nThe current schema will be used if not specified.
+ST_Expand(g1,units_to_expand)::geometry \nReturns bounding box expanded in all directions from the\nbounding box of the input geometry. Uses double-precision
+ST_Extent(geomfield)::box2d \nan aggregate function that returns the bounding box that\nbounds rows of geometries.
+ST_ExteriorRing(a_polygon)::geometry \nReturns a line string representing the exterior ring of the\nPOLYGON geometry. Return NULL if the geometry is not a\npolygon. Will not work with MULTIPOLYGON
+ST_Extrude(geom,x,y,z)::geometry \nExtrude a surface to a related volume
+ST_FlipCoordinates(geom)::geometry \nReturns a version of the given geometry with X and Y axis\nflipped. Useful for people who have built latitude/longitude\nfeatures and need to fix them.
+ST_Force2D(geomA)::geometry \nForces the geometries into a '2-dimensional mode' so that\nall output representations will only have the X and Y\ncoordinates.
+ST_Force3D(geomA)::geometry \nForces the geometries into XYZ mode. This is an alias for\nST_Force3DZ.
+ST_Force3DM(geomA)::geometry \nForces the geometries into XYM mode.
+ST_Force3DZ(geomA)::geometry \nForces the geometries into XYZ mode. This is a synonym for\nST_Force3D.
+ST_Force4D(geomA)::geometry \nForces the geometries into XYZM mode.
+ST_ForceCollection(geomA)::geometry \nConverts the geometry into a GEOMETRYCOLLECTION.
+ST_ForceLHR(geom)::geometry \nForce LHR orientation
+ST_ForceRHR(g)::boolean \nForces the orientation of the vertices in a polygon to\nfollow the Right-Hand-Rule.
+ST_ForceSFS(geomA)::geometry \nForces the geometries to use SFS 1.1 geometry types only.
+ST_FromGDALRaster(gdaldata,srid=NULL)::raster \nReturns a raster from a supported GDAL raster file.
+ST_GDALDrivers(OUT idx,OUT short_name,OUT long_name,OUT create_options)::setof \nrecord Returns a list of raster formats supported by your\nlib gdal. These are the formats you can output your raster\nusing ST_AsGDALRaster.
+ST_GeogFromText(EWKT)::geography \nReturn a specified geography value from Well-Known Text\nrepresentation or extended (WKT).
+ST_GeogFromWKB(geom)::geography \nCreates a geography instance from a Well-Known Binary\ngeometry representation (WKB) or extended Well Known Binary\n(EWKB).
+ST_GeographyFromText(EWKT)::geography \nReturn a specified geography value from Well-Known Text\nrepresentation or extended (WKT).
+ST_GeoHash(geom,maxchars=full_precision_of_point)::text \nReturn a GeoHash representation of the geometry.
+ST_GeomCollFromText(WKT,srid)::geometry \nMakes a collection Geometry from collection WKT with the\ngiven SRID. If SRID is not give, it defaults to 0.
+ST_GeometryFromText(WKT)::geometry \nReturn a specified ST_Geometry value from Well-Known Text\nrepresentation (WKT). This is an alias name for ST_GeomFromText
+ST_GeometryN(geomA,n)::geometry \nReturn the 1-based Nth geometry if the geometry is a\nGEOMETRYCOLLECTION, (MULTI)POINT, (MULTI)LINESTRING,\nMULTICURVE or (MULTI)POLYGON, POLYHEDRALSURFACE Otherwise,\nreturn NULL.
+ST_GeometryType(g1)::text \nReturn the geometry type of the ST_Geometry value.
+ST_GeomFromEWKB(EWKB)::geometry \nReturn a specified ST_Geometry value from Extended\nWell-Known Binary representation (EWKB).
+ST_GeomFromEWKT(EWKT)::geometry \nReturn a specified ST_Geometry value from Extended\nWell-Known Text representation (EWKT).
+ST_GeomFromGeoHash(geohash,precision=full_precision_of_geohash)::geometry \nReturn a geometry from a GeoHash string.
+ST_GeomFromGeoJSON(geomjson)::geometry \nTakes as input a geojson representation of a geometry and\noutputs a PostGIS geometry object
+ST_GeomFromGML(geomgml)::geometry \nTakes as input GML representation of geometry and outputs a\nPostGIS geometry object
+ST_GeomFromKML(geomkml)::geometry \nTakes as input KML representation of geometry and outputs a\nPostGIS geometry object
+ST_GeomFromText(WKT)::geometry \nReturn a specified ST_Geometry value from Well-Known Text\nrepresentation (WKT).
+ST_GeomFromWKB(geom)::geometry \nCreates a geometry instance from a Well-Known Binary\ngeometry representation (WKB) and optional SRID.
+ST_GeomFromWKB(geom)::geometry \nMakes a geometry from WKB with the given SRID
+ST_GeoReference(rast,format=GDAL)::text \nReturns the georeference meta data in GDAL or ESRI format as\ncommonly seen in a world file. Default is GDAL.
+ST_GetFaceEdges(atopology,aface)::getfaceedges_returntype \nReturns a set of ordered edges that bound aface.
+ST_GetFaceGeometry(atopology,aface)::geometry \nReturns the polygon in the given topology with the specified\nface id.
+ST_GMLToSQL(geomgml)::geometry \nReturn a specified ST_Geometry value from GML\nrepresentation. This is an alias name for ST_GeomFromGML
+ST_HasArc(geomA)::boolean \nReturns true if a geometry or geometry collection contains a\ncircular string
+ST_HasNoBand(rast,bandnum=1)::boolean \nReturns true if there is no band with given band number. If\nno band number is specified, then band number 1 is assumed.
+ST_HausdorffDistance(g1,g2)::float \nReturns the Hausdorff distance between two geometries.\nBasically a measure of how similar or dissimilar 2 geometries\nare. Units are in the units of the spatial reference system\nof the geometries.
+ST_Height(rast)::integer \nReturns the height of the raster in pixels.
+ST_HillShade(rast,band=1,pixeltype=32BF,azimuth=315,altitude=45,max_bright=255,scale=1.0,interpolate_nodata=FALSE)::raster \nReturns the hypothetical illumination of an elevation raster\nband using provided azimuth, altitude, brightness and scale\ninputs.
+ST_Histogram(rast,nband=1,exclude_nodata_value=true,bins=autocomputed,width=NULL,right=false)::setof \nrecord Returns a set of record summarizing a raster or\nraster coverage data distribution separate bin ranges. Number\nof bins are autocomputed if not specified.
+ST_InitTopoGeo(topology_schema_name)::text \nCreates a new topology schema and registers this new schema\nin the topology.topology table and details summary of process.
+ST_InteriorRingN(a_polygon,n)::geometry \nReturn the Nth interior linestring ring of the polygon\ngeometry. Return NULL if the geometry is not a polygon or the\ngiven N is out of range.
+ST_InterpolatePoint(line,point)::float \nReturn the value of the measure dimension of a geometry at\nthe point closed to the provided point.
+ST_Intersection(geom,rast,band_num=1)::setof \ngeomval Returns a raster or a set of geometry-pixelvalue\npairs representing the shared portion of two rasters or the\ngeometrical intersection of a vectorization of the raster and\na geometry.
+ST_Intersection(geomA,geomB)::geometry (T) \nReturns a geometry that represents the shared portion of\ngeomA and geomB. The geography implementation does a\ntransform to geometry to do the intersection and then\ntransform back to WGS84.
+ST_Intersects(geomA,geomB)::boolean \nReturns TRUE if the Geometries/Geography 'spatially\nintersect in 2D' - (share any portion of space) and FALSE if\nthey don't (they are Disjoint). For geography -- tolerance is\n0.00001 meters (so any points that close are considered to\nintersect)
+ST_Intersects(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if raster rastA spatially intersects raster rastB.
+ST_InvDistWeight4ma(value,pos,VARIADIC userargs)::double \nRaster processing function that interpolates a pixel's value\nfrom the pixel's neighborhood.
+ST_IsClosed(g)::boolean \nReturns TRUE if the LINESTRING's start and end points are\ncoincident. For Polyhedral surface is closed (volumetric).
+ST_IsCollection(g)::boolean \nReturns TRUE if the argument is a collection (MULTI*,\nGEOMETRYCOLLECTION, ...)
+ST_IsEmpty(geomA)::boolean \nReturns true if this Geometry is an empty\ngeometrycollection, polygon, point etc.
+ST_IsEmpty(rast)::boolean \nReturns true if the raster is empty (width = 0 and height =\n0). Otherwise, returns false.
+ST_IsRing(g)::boolean \nReturns TRUE if this LINESTRING is both closed and simple.
+ST_IsSimple(geomA)::boolean \nReturns (TRUE) if this Geometry has no anomalous geometric\npoints, such as self intersection or self tangency.
+ST_IsValid(g)::boolean \nReturns true if the ST_Geometry is well formed.
+ST_IsValidDetail(geom)::valid_detail \nReturns a valid_detail (valid,reason,location) row stating\nif a geometry is valid or not and if not valid, a reason why\nand a location where.
+ST_IsValidReason(geomA)::text \nReturns text stating if a geometry is valid or not and if\nnot valid, a reason why.
+ST_Length(a_2dlinestring)::float \nReturns the 2d length of the geometry if it is a linestring\nor multilinestring. geometry are in units of spatial\nreference and geography are in meters (default spheroid)
+ST_Length2D(a_2dlinestring)::float \nReturns the 2-dimensional length of the geometry if it is a\nlinestring or multi-linestring. This is an alias for ST_Length
+ST_Length2D_Spheroid(a_linestring,a_spheroid)::float \nCalculates the 2D length of a linestring/multilinestring on\nan ellipsoid. This is useful if the coordinates of the\ngeometry are in longitude/latitude and a length is desired\nwithout reprojection.
+ST_Length_Spheroid(a_linestring,a_spheroid)::float \nCalculates the 2D or 3D length of a\nlinestring/multilinestring on an ellipsoid. This is useful if\nthe coordinates of the geometry are in longitude/latitude and\na length is desired without reprojection.
+ST_LineCrossingDirection(linestringA,linestringB)::integer \nGiven 2 linestrings, returns a number between -3 and 3\ndenoting what kind of crossing behavior. 0 is no crossing.
+ST_LineFromMultiPoint(aMultiPoint)::geometry \nCreates a LineString from a MultiPoint geometry.
+ST_LineFromText(WKT)::geometry \nMakes a Geometry from WKT representation with the given\nSRID. If SRID is not given, it defaults to 0.
+ST_LineFromWKB(WKB)::geometry \nMakes a LINESTRING from WKB with the given SRID
+ST_LineInterpolatePoint(a_linestring,a_fraction)::geometry \nReturns a point interpolated along a line. Second argument\nis a float8 between 0 and 1 representing fraction of total\nlength of linestring the point has to be located.
+ST_LineLocatePoint(a_linestring,a_point)::float \nReturns a float between 0 and 1 representing the location of\nthe closest point on LineString to the given Point, as a\nfraction of total 2d line length.
+ST_LineMerge(amultilinestring)::geometry \nReturns a (set of) LineString(s) formed by sewing together a\nMULTILINESTRING.
+ST_LinestringFromWKB(WKB)::geometry \nMakes a geometry from WKB with the given SRID.
+ST_LineSubstring(a_linestring,startfraction,endfraction)::geometry \nReturn a linestring being a substring of the input one\nstarting and ending at the given fractions of total 2d\nlength. Second and third arguments are float8 values between\n0 and 1.
+ST_LineToCurve(geomANoncircular)::geometry \nConverts a LINESTRING/POLYGON to a CIRCULARSTRING, CURVED\nPOLYGON
+ST_LocateAlong(ageom_with_measure,a_measure,offset)::geometry \nReturn a derived geometry collection value with elements\nthat match the specified measure. Polygonal elements are not\nsupported.
+ST_LocateBetween(geomA,measure_start,measure_end,offset)::geometry \nReturn a derived geometry collection value with elements\nthat match the specified range of measures inclusively.\nPolygonal elements are not supported.
+ST_LocateBetweenElevations(geom_mline,elevation_start,elevation_end)::geometry \nReturn a derived geometry (collection) value with elements\nthat intersect the specified range of elevations inclusively.\nOnly 3D, 4D LINESTRINGS and MULTILINESTRINGS are supported.
+ST_LongestLine(g1,g2)::geometry \nReturns the 2-dimensional longest line points of two\ngeometries. The function will only return the first longest\nline if more than one, that the function finds. The line\nreturned will always start in g1 and end in g2. The length of\nthe line this function returns will always be the same as\nst_maxdistance returns for g1 and g2.
+ST_M(a_point)::float \nReturn the M coordinate of the point, or NULL if not\navailable. Input must be a point.
+ST_MakeBox2D(pointLowLeft,pointUpRight)::box2d \nCreates a BOX2D defined by the given point geometries.
+ST_MakeEmptyRaster(rast)::raster \nReturns an empty raster (having no bands) of given\ndimensions (width & height), upperleft X and Y, pixel size\nand rotation (scalex, scaley, skewx & skewy) and reference\nsystem (srid). If a raster is passed in, returns a new raster\nwith the same size, alignment and SRID. If srid is left out,\nthe spatial ref is set to unknown (0).
+ST_MakeEnvelope(xmin,ymin,xmax,ymax,srid=unknown)::geometry \nCreates a rectangular Polygon formed from the given minimums\nand maximums. Input values must be in SRS specified by the\nSRID.
+ST_MakeLine(geoms)::geometry \nCreates a Linestring from point or line geometries.
+ST_MakePoint(x,y)::geometry \nCreates a 2D,3DZ or 4D point geometry.
+ST_MakePointM(x,y,m)::geometry \nCreates a point geometry with an x y and m coordinate.
+ST_MakePolygon(linestring)::geometry \nCreates a Polygon formed by the given shell. Input\ngeometries must be closed LINESTRINGS.
+ST_MakeValid(input)::geometry \nAttempts to make an invalid geometry valid without losing\nvertices.
+ST_MapAlgebra(rast,nband,pixeltype,expression,nodataval=NULL)::raster \nExpression version - Returns a one-band raster given one or\ntwo input rasters, band indexes and one or more\nuser-specified SQL expressions.
+ST_MapAlgebra(rastbandargset,callbackfunc,pixeltype=NULL,extenttype=INTERSECTION,customextent=NULL,distancex=0,distancey=0,VARIADIC userargs=NULL)::raster \nCallback function version - Returns a one-band raster given\none or more input rasters, band indexes and one\nuser-specified callback function.
+ST_MapAlgebraExpr(rast,band,pixeltype,expression,nodataval=NULL)::raster 1 \nraster band version: Creates a new one band raster formed by\napplying a valid PostgreSQL algebraic operation on the input\nraster band and of pixeltype provided. Band 1 is assumed if\nno band is specified.
+ST_MapAlgebraExpr(rast1,rast2,expression,pixeltype=same_as_rast1_band,extenttype=INTERSECTION,nodata1expr=NULL,nodata2expr=NULL,nodatanodataval=NULL)::raster 2 \nraster band version: Creates a new one band raster formed by\napplying a valid PostgreSQL algebraic operation on the two\ninput raster bands and of pixeltype provided. band 1 of each\nraster is assumed if no band numbers are specified. The\nresulting raster will be aligned (scale, skew and pixel\ncorners) on the grid defined by the first raster and have its\nextent defined by the 'extenttype' parameter. Values for\n'extenttype' can be: INTERSECTION, UNION, FIRST, SECOND.
+ST_MapAlgebraFct(rast,onerasteruserfunc)::raster 1 \nband version - Creates a new one band raster formed by\napplying a valid PostgreSQL function on the input raster band\nand of pixeltype prodived. Band 1 is assumed if no band is\nspecified.
+ST_MapAlgebraFct(rast1,rast2,tworastuserfunc,pixeltype=same_as_rast1,extenttype=INTERSECTION,VARIADIC userargs)::raster 2 \nband version - Creates a new one band raster formed by\napplying a valid PostgreSQL function on the 2 input raster\nbands and of pixeltype prodived. Band 1 is assumed if no band\nis specified. Extent type defaults to INTERSECTION if not\nspecified.
+ST_MapAlgebraFctNgb(rast,band,pixeltype,ngbwidth,ngbheight,onerastngbuserfunc,nodatamode,VARIADIC args)::raster 1-band \nversion: Map Algebra Nearest Neighbor using user-defined\nPostgreSQL function. Return a raster which values are the\nresult of a PLPGSQL user function involving a neighborhood of\nvalues from the input raster band.
+ST_Max4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the maximum pixel\nvalue in a neighborhood.
+ST_MaxDistance(g1,g2)::float \nReturns the 2-dimensional largest distance between two\ngeometries in projected units.
+ST_Mean4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the mean pixel\nvalue in a neighborhood.
+ST_Mem_Size(geomA)::integer \nReturns the amount of space (in bytes) the geometry takes.
+ST_MemUnion(geomfield)::geometry \nSame as ST_Union, only memory-friendly (uses less memory and\nmore processor time).
+ST_MetaData(rast)::record \nReturns basic meta data about a raster object such as pixel\nsize, rotation (skew), upper, lower left, etc.
+ST_Min4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the minimum pixel\nvalue in a neighborhood.
+ST_MinConvexHull(rast,nband=NULL)::geometry \nReturn the convex hull geometry of the raster excluding\nNODATA pixels.
+ST_MinDist4ma(value,pos,VARIADIC userargs)::double \nRaster processing function that returns the minimum distance\n(in number of pixels) between the pixel of interest and a\nneighboring pixel with value.
+ST_MinimumBoundingCircle(geomA,num_segs_per_qt_circ=48)::geometry \nReturns the smallest circle polygon that can fully contain a\ngeometry. Default uses 48 segments per quarter circle.
+ST_MinkowskiSum(geom1,geom2)::geometry \nPerforms Minkowski sum
+ST_MLineFromText(WKT,srid)::geometry \nReturn a specified ST_MultiLineString value from WKT\nrepresentation.
+ST_ModEdgeHeal(atopology,anedge,anotheredge)::int \nHeal two edges by deleting the node connecting them,\nmodifying the first edge and deleting the second edge.\nReturns the id of the deleted node.
+ST_ModEdgeSplit(atopology,anedge,apoint)::integer \nSplit an edge by creating a new node along an existing edge,\nmodifying the original edge and adding a new edge.
+ST_MoveIsoNode(atopology,anedge,apoint)::text \nMoves an isolated node in a topology from one point to\nanother. If new apoint geometry exists as a node an error is\nthrown. REturns description of move.
+ST_MPointFromText(WKT,srid)::geometry \nMakes a Geometry from WKT with the given SRID. If SRID is\nnot give, it defaults to 0.
+ST_MPolyFromText(WKT,srid)::geometry \nMakes a MultiPolygon Geometry from WKT with the given SRID.\nIf SRID is not give, it defaults to 0.
+ST_Multi(g1)::geometry \nReturns the geometry as a MULTI* geometry. If the geometry\nis already a MULTI*, it is returned unchanged.
+ST_NDims(g1)::integer \nReturns coordinate dimension of the geometry as a small int.\nValues are: 2,3 or 4.
+ST_NearestValue(rast,bandnum,pt,exclude_nodata_value=true)::double \nReturns the nearest non-NODATA value of a given band's pixel\nspecified by a columnx and rowy or a geometric point\nexpressed in the same spatial reference coordinate system as\nthe raster.
+ST_Neighborhood(rast,bandnum,columnX,rowY,distanceX,distanceY,exclude_nodata_value=true)::double \nReturns a 2-D double precision array of the non-NODATA\nvalues around a given band's pixel specified by either a\ncolumnX and rowY or a geometric point expressed in the same\nspatial reference coordinate system as the raster.
+ST_NewEdgeHeal(atopology,anedge,anotheredge)::int \nHeal two edges by deleting the node connecting them,\ndeleting both edges, and replacing them with an edge whose\ndirection is the same as the first edge provided.
+ST_NewEdgesSplit(atopology,anedge,apoint)::integer \nSplit an edge by creating a new node along an existing edge,\ndeleting the original edge and replacing it with two new\nedges. Returns the id of the new node created that joins the\nnew edges.
+ST_Node(geom)::geometry \nNode a set of linestrings.
+ST_NotSameAlignmentReason(rastA,rastB)::text \nReturns text stating if rasters are aligned and if not\naligned, a reason why.
+ST_NPoints(g1)::integer \nReturn the number of points (vertexes) in a geometry.
+ST_NRings(geomA)::integer \nIf the geometry is a polygon or multi-polygon returns the\nnumber of rings.
+ST_NumBands(rast)::integer \nReturns the number of bands in the raster object.
+ST_NumGeometries(geom)::integer \nIf geometry is a GEOMETRYCOLLECTION (or MULTI*) return the\nnumber of geometries, for single geometries will return 1,\notherwise return NULL.
+ST_NumInteriorRing(a_polygon)::integer \nReturn the number of interior rings of the first polygon in\nthe geometry. Synonym to ST_NumInteriorRings.
+ST_NumInteriorRings(a_polygon)::integer \nReturn the number of interior rings of the a polygon in the\ngeometry. This will work with POLYGON and return NULL for a\nMULTIPOLYGON type or any other type
+ST_NumPatches(g1)::integer \nReturn the number of faces on a Polyhedral Surface. Will\nreturn null for non-polyhedral geometries.
+ST_NumPoints(g1)::integer \nReturn the number of points in an ST_LineString or\nST_CircularString value.
+ST_OffsetCurve(line,signed_distance,style_parameters='')::geometry \nReturn an offset line at a given distance and side from an\ninput line. Useful for computing parallel lines about a\ncenter line
+ST_OrderingEquals(A,B)::boolean \nReturns true if the given geometries represent the same\ngeometry and points are in the same directional order.
+ST_Orientation(geom)::integer \nDetermine surface orientation
+ST_Overlaps(A,B)::boolean \nReturns TRUE if the Geometries share space, are of the same\ndimension, but are not completely contained by each other.
+ST_Overlaps(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if raster rastA and rastB intersect but one does\nnot completely contain the other.
+ST_PatchN(geomA,n)::geometry \nReturn the 1-based Nth geometry (face) if the geometry is a\nPOLYHEDRALSURFACE, POLYHEDRALSURFACEM. Otherwise, return NULL.
+ST_Perimeter(g1)::float \nReturn the length measurement of the boundary of an\nST_Surface or ST_MultiSurface geometry or geography.\n(Polygon, Multipolygon). geometry measurement is in units of\nspatial reference and geography is in meters.
+ST_Perimeter2D(geomA)::float \nReturns the 2-dimensional perimeter of the geometry, if it\nis a polygon or multi-polygon. This is currently an alias for\nST_Perimeter.
+ST_PixelAsCentroid(rast,columnx,rowy)::geometry \nReturns the centroid (point geometry) of the area\nrepresented by a pixel.
+ST_PixelAsCentroids(rast,band=1,exclude_nodata_value=TRUE)::geometry \nReturns the centroid (point geometry) for each pixel of a\nraster band along with the value, the X and the Y raster\ncoordinates of each pixel. The point geometry is the centroid\nof the area represented by a pixel.
+ST_PixelAsPoint(rast,columnx,rowy)::geometry \nReturns a point geometry of the pixel's upper-left corner.
+ST_PixelAsPoints(rast,band=1,exclude_nodata_value=TRUE)::geometry \nReturns a point geometry for each pixel of a raster band\nalong with the value, the X and the Y raster coordinates of\neach pixel. The coordinates of the point geometry are of the\npixel's upper-left corner.
+ST_PixelAsPolygon(rast,columnx,rowy)::geometry \nReturns the polygon geometry that bounds the pixel for a\nparticular row and column.
+ST_PixelAsPolygons(rast,band=1,exclude_nodata_value=TRUE)::setof \nrecord Returns the polygon geometry that bounds every pixel\nof a raster band along with the value, the X and the Y raster\ncoordinates of each pixel.
+ST_PixelHeight(rast)::double \nReturns the pixel height in geometric units of the spatial\nreference system.
+ST_PixelOfValue(rast,nband,search,exclude_nodata_value=true)::setof \nrecord Get the columnx, rowy coordinates of the pixel whose\nvalue equals the search value.
+ST_PixelWidth(rast)::double \nReturns the pixel width in geometric units of the spatial\nreference system.
+ST_Point(x_lon,y_lat)::geometry \nReturns an ST_Point with the given coordinate values. OGC\nalias for ST_MakePoint.
+ST_Point_Inside_Circle(a_point,center_x,center_y,radius)::boolean \nIs the point geometry insert circle defined by center_x,\ncenter_y, radius
+ST_PointFromGeoHash(geohash,precision=full_precision_of_geohash)::point \nReturn a point from a GeoHash string.
+ST_PointFromText(WKT)::geometry \nMakes a point Geometry from WKT with the given SRID. If SRID\nis not given, it defaults to unknown.
+ST_PointN(a_linestring,n)::geometry \nReturn the Nth point in the first linestring or circular\nlinestring in the geometry. Return NULL if there is no\nlinestring in the geometry.
+ST_PointOnSurface(g1)::geometry \nReturns a POINT guaranteed to lie on the surface.
+ST_Polygon(aLineString,srid)::geometry \nReturns a polygon built from the specified linestring and SRID.
+ST_Polygon(rast,band_num=1)::geometry \nReturns a multipolygon geometry formed by the union of\npixels that have a pixel value that is not no data value. If\nno band number is specified, band num defaults to 1.
+ST_PolygonFromText(WKT)::geometry \nMakes a Geometry from WKT with the given SRID. If SRID is\nnot give, it defaults to 0.
+ST_Polygonize(geomfield)::geometry \nAggregate. Creates a GeometryCollection containing possible\npolygons formed from the constituent linework of a set of\ngeometries.
+ST_Project(g1,distance,azimuth)::geography \nReturns a POINT projected from a start point using a\ndistance in meters and bearing (azimuth) in radians.
+ST_Quantile(rast,nband=1,exclude_nodata_value=true,quantiles=NULL)::setof \nrecord Compute quantiles for a raster or raster table\ncoverage in the context of the sample or population. Thus, a\nvalue could be examined to be at the raster's 25%, 50%, 75%\npercentile.
+ST_Range4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the range of\npixel values in a neighborhood.
+ST_RasterToWorldCoord(rast,xcolumn,yrow)::record \nReturns the raster's upper left corner as geometric X and Y\n(longitude and latitude) given a column and row. Column and\nrow starts at 1.
+ST_RasterToWorldCoordX(rast,xcolumn)::float8 \nReturns the geometric X coordinate upper left of a raster,\ncolumn and row. Numbering of columns and rows starts at 1.
+ST_RasterToWorldCoordY(rast,yrow)::float8 \nReturns the geometric Y coordinate upper left corner of a\nraster, column and row. Numbering of columns and rows starts\nat 1.
+ST_Reclass(rast,nband,reclassexpr,pixeltype,nodataval=NULL)::raster \nCreates a new raster composed of band types reclassified\nfrom original. The nband is the band to be changed. If nband\nis not specified assumed to be 1. All other bands are\nreturned unchanged. Use case: convert a 16BUI band to a 8BUI\nand so forth for simpler rendering as viewable formats.
+ST_Relate(geomA,geomB,intersectionMatrixPattern)::boolean \nReturns true if this Geometry is spatially related to\nanotherGeometry, by testing for intersections between the\nInterior, Boundary and Exterior of the two geometries as\nspecified by the values in the intersectionMatrixPattern. If\nno intersectionMatrixPattern is passed in, then returns the\nmaximum intersectionMatrixPattern that relates the 2\ngeometries.
+ST_RelateMatch(intersectionMatrix,intersectionMatrixPattern)::boolean \nReturns true if intersectionMattrixPattern1 implies\nintersectionMatrixPattern2
+ST_RemEdgeModFace(atopology,anedge)::integer \nRemoves an edge and, if the removed edge separated two\nfaces, delete one of the them and modify the other to take\nthe space of both.
+ST_RemEdgeNewFace(atopology,anedge)::integer \nRemoves an edge and, if the removed edge separated two\nfaces, delete the original faces and replace them with a new\nface.
+ST_RemoveIsoNode(atopology,anode)::text \nRemoves an isolated node and returns description of action.\nIf the node is not isolated (is start or end of an edge),\nthen an exception is thrown.
+ST_RemovePoint(linestring,offset)::geometry \nRemoves point from a linestring. Offset is 0-based.
+ST_RemoveRepeatedPoints(geom)::geometry \nReturns a version of the given geometry with duplicated\npoints removed.
+ST_Resample(rast,width,height,gridx=NULL,gridy=NULL,skewx=0,skewy=0,algorithm=NearestNeighbour,maxerr=0.125)::raster \nResample a raster using a specified resampling algorithm,\nnew dimensions, an arbitrary grid corner and a set of raster\ngeoreferencing attributes defined or borrowed from another\nraster.
+ST_Rescale(rast,scalexy,algorithm=NearestNeighbour,maxerr=0.125)::raster \nResample a raster by adjusting only its scale (or pixel\nsize). New pixel values are computed using the\nNearestNeighbor (english or american spelling), Bilinear,\nCubic, CubicSpline or Lanczos resampling algorithm. Default\nis NearestNeighbor.
+ST_Resize(rast,width,height,algorithm=NearestNeighbor,maxerr=0.125)::raster \nResize a raster to a new width/height
+ST_Reskew(rast,skewxy,algorithm=NearestNeighbour,maxerr=0.125)::raster \nResample a raster by adjusting only its skew (or rotation\nparameters). New pixel values are computed using the\nNearestNeighbor (english or american spelling), Bilinear,\nCubic, CubicSpline or Lanczos resampling algorithm. Default\nis NearestNeighbor.
+ST_Reverse(g1)::geometry \nReturns the geometry with vertex order reversed.
+ST_Rotate(geomA,rotRadians)::geometry \nRotate a geometry rotRadians counter-clockwise about an origin.
+ST_RotateX(geomA,rotRadians)::geometry \nRotate a geometry rotRadians about the X axis.
+ST_RotateY(geomA,rotRadians)::geometry \nRotate a geometry rotRadians about the Y axis.
+ST_RotateZ(geomA,rotRadians)::geometry \nRotate a geometry rotRadians about the Z axis.
+ST_Rotation(rast)::float8 \nReturns the rotation of the raster in radian.
+ST_Roughness(rast,nband,customextent,pixeltype='32BF',interpolate_nodata=FALSE )::raster \nReturns a raster with the calculated 'roughness' of a DEM.
+ST_SameAlignment(rastA,rastB)::boolean \nReturns true if rasters have same skew, scale, spatial ref,\nand offset (pixels can be put on same grid without cutting\ninto pixels) and false if they don't with notice detailing\nissue.
+ST_Scale(geomA,XFactor,YFactor,ZFactor)::geometry \nScales the geometry to a new size by multiplying the\nordinates with the parameters. Ie: ST_Scale(geom, Xfactor,\nYfactor, Zfactor).
+ST_ScaleX(rast)::float8 \nReturns the X component of the pixel width in units of\ncoordinate reference system.
+ST_ScaleY(rast)::float8 \nReturns the Y component of the pixel height in units of\ncoordinate reference system.
+ST_Segmentize(geom,max_segment_length)::geometry \nReturn a modified geometry/geography having no segment\nlonger than the given distance. Distance computation is\nperformed in 2d only. For geometry, length units are in units\nof spatial reference. For geography, units are in meters.
+ST_SetBandIsNoData(rast,band=1)::raster \nSets the isnodata flag of the band to TRUE.
+ST_SetBandNoDataValue(rast,nodatavalue)::raster \nSets the value for the given band that represents no data.\nBand 1 is assumed if no band is specified. To mark a band as\nhaving no nodata value, set the nodata value = NULL.
+ST_SetGeoReference(rast,georefcoords,format=GDAL)::raster \nSet Georeference 6 georeference parameters in a single call.\nNumbers should be separated by white space. Accepts inputs in\nGDAL or ESRI format. Default is GDAL.
+ST_SetPoint(linestring,zerobasedposition,point)::geometry \nReplace point N of linestring with given point. Index is\n0-based.
+ST_SetRotation(rast,rotation)::float8 \nSet the rotation of the raster in radian.
+ST_SetScale(rast,xy)::raster \nSets the X and Y size of pixels in units of coordinate\nreference system. Number units/pixel width/height.
+ST_SetSkew(rast,skewxy)::raster \nSets the georeference X and Y skew (or rotation parameter).\nIf only one is passed in, sets X and Y to the same value.
+ST_SetSRID(geom,srid)::geometry \nSets the SRID on a geometry to a particular integer value.
+ST_SetSRID(rast,srid)::raster \nSets the SRID of a raster to a particular integer srid\ndefined in the spatial_ref_sys table.
+ST_SetUpperLeft(rast,x,y)::raster \nSets the value of the upper left corner of the pixel to\nprojected X and Y coordinates.
+ST_SetValue(rast,bandnum,geom,newvalue)::raster \nReturns modified raster resulting from setting the value of\na given band in a given columnx, rowy pixel or the pixels\nthat intersect a particular geometry. Band numbers start at 1\nand assumed to be 1 if not specified.
+ST_SetValues(rast,nband,columnx,rowy,newvalueset,noset=NULL,keepnodata=FALSE)::raster \nReturns modified raster resulting from setting the values of\na given band.
+ST_SharedPaths(lineal1,lineal2)::geometry \nReturns a collection containing paths shared by the two\ninput linestrings/multilinestrings.
+ST_Shift_Longitude(geomA)::geometry \nReads every point/vertex in every component of every feature\nin a geometry, and if the longitude coordinate is <0, adds\n360 to it. The result would be a 0-360 version of the data to\nbe plotted in a 180 centric map
+ST_ShortestLine(g1,g2)::geometry \nReturns the 2-dimensional shortest line between two geometries
+ST_Simplify(geomA,tolerance)::geometry \nReturns a 'simplified' geometry version of the given\nTopoGeometry using the Douglas-Peucker algorithm.
+ST_Simplify(geomA,tolerance)::geometry \nReturns a 'simplified' version of the given geometry using\nthe Douglas-Peucker algorithm.
+ST_SimplifyPreserveTopology(geomA,tolerance)::geometry \nReturns a 'simplified' version of the given geometry using\nthe Douglas-Peucker algorithm. Will avoid creating derived\ngeometries (polygons in particular) that are invalid.
+ST_SkewX(rast)::float8 \nReturns the georeference X skew (or rotation parameter).
+ST_SkewY(rast)::float8 \nReturns the georeference Y skew (or rotation parameter).
+ST_Slope(rast,nband=1,pixeltype=32BF,units=DEGREES,scale=1.0,interpolate_nodata=FALSE)::raster \nReturns the slope (in degrees by default) of an elevation\nraster band. Useful for analyzing terrain.
+ST_Snap(input,reference,tolerance)::geometry \nSnap segments and vertices of input geometry to vertices of\na reference geometry.
+ST_SnapToGrid(geomA,originX,originY,sizeX,sizeY)::geometry \nSnap all points of the input geometry to a regular grid.
+ST_SnapToGrid(rast,gridx,gridy,algorithm=NearestNeighbour,maxerr=0.125,scalex=DEFAULT 0,scaley=DEFAULT 0)::raster \nResample a raster by snapping it to a grid. New pixel values\nare computed using the NearestNeighbor (english or american\nspelling), Bilinear, Cubic, CubicSpline or Lanczos resampling\nalgorithm. Default is NearestNeighbor.
+ST_Split(input,blade)::geometry \nReturns a collection of geometries resulting by splitting a\ngeometry.
+ST_SRID(g1)::integer \nReturns the spatial reference identifier for the ST_Geometry\nas defined in spatial_ref_sys table.
+ST_SRID(rast)::integer \nReturns the spatial reference identifier of the raster as\ndefined in spatial_ref_sys table.
+ST_StartPoint(geomA)::geometry \nReturns the first point of a LINESTRING geometry as a POINT.
+ST_StdDev4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the standard\ndeviation of pixel values in a neighborhood.
+ST_StraightSkeleton(geom)::geometry \nCompute a straight skeleton from a geometry
+ST_Sum4ma(matrix,nodatamode,VARIADIC args)::float8 \nRaster processing function that calculates the sum of all\npixel values in a neighborhood.
+ST_Summary(g)::text \nReturns a text summary of the contents of the geometry.
+ST_Summary(rast)::text \nReturns a text summary of the contents of the raster.
+ST_SummaryStats(rastertable,rastercolumn,exclude_nodata_value)::record \nReturns record consisting of count, sum, mean, stddev, min,\nmax for a given raster band of a raster or raster coverage.\nBand 1 is assumed is no band is specified.
+ST_SymDifference(geomA,geomB)::geometry \nReturns a geometry that represents the portions of A and B\nthat do not intersect. It is called a symmetric difference\nbecause ST_SymDifference(A,B) = ST_SymDifference(B,A).
+ST_Tesselate(geom)::geometry \nPerform surface Tesselation
+ST_Tile(rast,nband,width,height,padwithnodata=FALSE,nodataval=NULL)::setof \nraster Returns a set of rasters resulting from the split of\nthe input raster based upon the desired dimensions of the\noutput rasters.
+ST_Touches(g1,g2)::boolean \nReturns TRUE if the geometries have at least one point in\ncommon, but their interiors do not intersect.
+ST_Touches(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if raster rastA and rastB have at least one\npoint in common but their interiors do not intersect.
+ST_TPI(rast,nband,customextent,pixeltype='32BF',interpolate_nodata=FALSE )::raster \nReturns a raster with the calculated Topographic Position\nIndex.
+ST_Transform(g1,srid)::geometry \nReturns a new geometry with its coordinates transformed to\nthe SRID referenced by the integer parameter.
+ST_Transform(rast,srid,algorithm=NearestNeighbor,maxerr=0.125,scalex,scaley)::raster \nReprojects a raster in a known spatial reference system to\nanother known spatial reference system using specified\nresampling algorithm. Options are NearestNeighbor, Bilinear,\nCubic, CubicSpline, Lanczos defaulting to NearestNeighbor.
+ST_Translate(g1,deltax,deltay)::geometry \nTranslates the geometry to a new location using the numeric\nparameters as offsets. Ie: ST_Translate(geom, X, Y) or\nST_Translate(geom, X, Y,Z).
+ST_TransScale(geomA,deltaX,deltaY,XFactor,YFactor)::geometry \nTranslates the geometry using the deltaX and deltaY args,\nthen scales it using the XFactor, YFactor args, working in 2D\nonly.
+ST_TRI(rast,nband,customextent,pixeltype='32BF',interpolate_nodata=FALSE )::raster \nReturns a raster with the calculated Terrain Ruggedness Index.
+ST_UnaryUnion(geom)::geometry \nLike ST_Union, but working at the geometry component level.
+ST_Union(g1field)::geometry \nReturns a geometry that represents the point set union of\nthe Geometries.
+ST_Union(rast)::raster \nReturns the union of a set of raster tiles into a single\nraster composed of 1 or more bands.
+ST_UpperLeftX(rast)::float8 \nReturns the upper left X coordinate of raster in projected\nspatial ref.
+ST_UpperLeftY(rast)::float8 \nReturns the upper left Y coordinate of raster in projected\nspatial ref.
+ST_Value(rast,pt,exclude_nodata_value=true)::double \nReturns the value of a given band in a given columnx, rowy\npixel or at a particular geometric point. Band numbers start\nat 1 and assumed to be 1 if not specified. If\nexclude_nodata_value is set to false, then all pixels include\nnodata pixels are considered to intersect and return value.\nIf exclude_nodata_value is not passed in then reads it from\nmetadata of raster.
+ST_ValueCount(rast,nband=1,exclude_nodata_value=true,searchvalues=NULL,roundto=0,OUT value,OUT count)::setof \nrecord Returns a set of records containing a pixel band\nvalue and count of the number of pixels in a given band of a\nraster (or a raster coverage) that have a given set of\nvalues. If no band is specified defaults to band 1. By\ndefault nodata value pixels are not counted. and all other\nvalues in the pixel are output and pixel band values are\nrounded to the nearest integer.
+ST_Width(rast)::integer \nReturns the width of the raster in pixels.
+ST_Within(A,B)::boolean \nReturns true if the geometry A is completely inside geometry B
+ST_Within(rastA,nbandA,rastB,nbandB)::boolean \nReturn true if no points of raster rastA lie in the exterior\nof raster rastB and at least one point of the interior of\nrastA lies in the interior of rastB.
+ST_WKBToSQL(WKB)::geometry \nReturn a specified ST_Geometry value from Well-Known Binary\nrepresentation (WKB). This is an alias name for\nST_GeomFromWKB that takes no srid
+ST_WKTToSQL(WKT)::geometry \nReturn a specified ST_Geometry value from Well-Known Text\nrepresentation (WKT). This is an alias name for ST_GeomFromText
+ST_WorldToRasterCoord(rast,pt)::record \nReturns the upper left corner as column and row given\ngeometric X and Y (longitude and latitude) or a point\ngeometry expressed in the spatial reference coordinate system\nof the raster.
+ST_WorldToRasterCoordX(rast,pt)::integer \nReturns the column in the raster of the point geometry (pt)\nor a X and Y world coordinate (xw, yw) represented in world\nspatial reference system of raster.
+ST_WorldToRasterCoordY(rast,pt)::integer \nReturns the row in the raster of the point geometry (pt) or\na X and Y world coordinate (xw, yw) represented in world\nspatial reference system of raster.
+ST_X(a_point)::float \nReturn the X coordinate of the point, or NULL if not\navailable. Input must be a point.
+ST_XMax(aGeomorBox2DorBox3D)::float \nReturns X maxima of a bounding box 2d or 3d or a geometry.
+ST_XMin(aGeomorBox2DorBox3D)::float \nReturns X minima of a bounding box 2d or 3d or a geometry.
+ST_Y(a_point)::float \nReturn the Y coordinate of the point, or NULL if not\navailable. Input must be a point.
+ST_YMax(aGeomorBox2DorBox3D)::float \nReturns Y maxima of a bounding box 2d or 3d or a geometry.
+ST_YMin(aGeomorBox2DorBox3D)::float \nReturns Y minima of a bounding box 2d or 3d or a geometry.
+ST_Z(a_point)::float \nReturn the Z coordinate of the point, or NULL if not\navailable. Input must be a point.
+ST_ZMax(aGeomorBox2DorBox3D)::float \nReturns Z minima of a bounding box 2d or 3d or a geometry.
+ST_Zmflag(geomA)::smallint \nReturns ZM (dimension semantic) flag of the geometries as a\nsmall int. Values are: 0=2d, 1=3dm, 2=3dz, 3=4d.
+ST_ZMin(aGeomorBox2DorBox3D)::float \nReturns Z minima of a bounding box 2d or 3d or a geometry.
+TopoElementArray_Agg(tefield)::topoelementarray \nReturns a topoelementarray for a set of element_id, type\narrays (topoelements)
+TopoGeo_AddLineString(toponame,aline,tolerance)::setof \ninteger Adds a linestring to an existing topology using a\ntolerance and possibly splitting existing edges/faces.\nReturns edge identifiers
+TopoGeo_AddPoint(toponame,apoint,tolerance)::integer \nAdds a point to an existing topology using a tolerance and\npossibly splitting an existing edge.
+TopoGeo_AddPolygon(atopology,apoly,atolerance)::integer \nAdds a polygon to an existing topology using a tolerance and\npossibly splitting existing edges/faces.
+Topology_Load_Tiger(topo_name,region_type,region_id)::text \nLoads a defined region of tiger data into a PostGIS Topology\nand transforming the tiger data to spatial reference of the\ntopology and snapping to the precision tolerance of the\ntopology.
+TopologySummary(topology_schema_name)::text \nTakes a topology name and provides summary totals of types\nof objects in topology
+toTopoGeom(geom,toponame,layer_id,tolerance)::topogeometry \nConverts a simple Geometry into a topo geometry
+UnlockRows(auth_token)::integer \nRemove all locks held by specified authorization id. Returns\nthe number of locks released.
+UpdateGeometrySRID(table_name,column_name,srid)::text \nUpdates the SRID of all features in a geometry column,\ngeometry_columns metadata and srid. If it was enforced with\nconstraints, the constraints will be updated with new srid\nconstraint. If the old was enforced by type definition, the\ntype definition will be changed.
+UpdateRasterSRID(schema_name,table_name,column_name,new_srid)::raster \nChange the SRID of all rasters in the user-specified column\nand table.
+ValidateTopology(topology_schema_name)::setof \nvalidatetopology_returntype Returns a set of\nvalidatetopology_returntype objects detailing issues with\ntopology
